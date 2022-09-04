@@ -1,1 +1,1 @@
-# prog2-ws2022
+# Beispiele aus der Vorlesung Programmieren II im WS 2022
