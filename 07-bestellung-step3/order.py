@@ -1,11 +1,26 @@
 import csv
+from customer import Adresse, Kunde
+from article import Artikel
 
+# Bestellung braucht jetzt eine Rechnungsadresse, eine Lieferadresse, einen Verweisen auf den Kunden und je Bestellung mehrere Positionen, die Artikel verweisen
+
+class BestellPosition:
+    def __init__(self, anzahl: int, artikel: Artikel):
+        self.anzahl = anzahl
+        self.artikel = artikel
 
 class Bestellung:
-    def __init__(self, Bestellungsnumer, Datum, Liefer):
+    def __init__(self, Bestellungsnumer, Datum, Liefer, Kunde : Kunde, Lieferadresse : Adresse, Rechnungsadresse : Adresse):
         self.Bestellungsnummer = Bestellungsnumer
         self.Datum = Datum
         self.Liefer = Liefer
+        self.Lieferadresse = Lieferadresse
+        self.Kunde = Kunde
+        self.Rechnungsadresse = Rechnungsadresse
+        self.Positionen = []
+
+    def add_position(self, bestell_position: BestellPosition):
+        self.Positionen.append(bestell_position)
 
     def __str__(self):
         return f'{self.Bestellungsnummer}, {self.Datum}, {self.Liefer}'
@@ -20,13 +35,10 @@ def save():
             spaltenListe = [element.Datum, element.Liefer, element.Bestellungsnummer]
             writer.writerow(spaltenListe)
 
-try:
-    with open("orders.csv", newline='') as csvfile:
-        reader = csv.reader(csvfile, delimiter=';', quotechar='"')
-        for row in reader:
-            Bestellung_Liste.append(Bestellung(row[2], row[0], row[1]))
-except FileNotFoundError:
-    pass
+with open("orders.csv", newline='') as csvfile:
+    reader = csv.reader(csvfile, delimiter=';', quotechar='"')
+    for row in reader:
+        Bestellung_Liste.append(Bestellung(row[2], row[0], row[1]))
 
 while True:
     # Den Nutzer zwischen Auflisten und Hinzufügen
@@ -40,6 +52,10 @@ while True:
         for i in Bestellung_Liste:
             print(str(i))
     elif auswahl == "2":
+        # ToDo: Kunde auswählen
+        # ToDo: Adressen von ausgewählten Kunden auswählen
+        # ToDo: BestellPosition
+
         Bestellung_Liste.append(Bestellung(
             input('Bestellungsnummer: '),
             input('Datum: '),

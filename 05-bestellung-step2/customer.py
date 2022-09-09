@@ -15,10 +15,13 @@ def save():
         for kunde in kunden:
             writer.writerow([kunde.Name, kunde.Strasse, kunde.PLZ, kunde.Ort])
 
-with open("Kundendaten.csv", newline='') as csvfile:
-    reader = csv.reader(csvfile, delimiter=';', quotechar='"')
-    for row in reader:
-        kunden.append(Kunden(row[0], row[1], row[2], row[3], row[4]))
+try:
+    with open("Kundendaten.csv", newline='') as csvfile:
+        reader = csv.reader(csvfile, delimiter=';', quotechar='"')
+        for row in reader:
+            kunden.append(Kunden(row[0], row[1], row[2], row[3], row[4]))
+except FileNotFoundError:
+    pass
 
 while True:
     # Den Nutzer zwischen Auflisten und Hinzufügen

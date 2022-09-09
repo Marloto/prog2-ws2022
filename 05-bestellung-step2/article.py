@@ -20,10 +20,13 @@ def Speicher():
 
 
 article = []
-with open("articles.csv", newline='') as csvfile:
-    reader = csv.reader(csvfile, delimiter=';', quotechar='"')
-    for row in reader:
-        article.append(Artikel(int(row[0]), row[1], float(row[2])))
+try:
+    with open("articles.csv", newline='') as csvfile:
+        reader = csv.reader(csvfile, delimiter=';', quotechar='"')
+        for row in reader:
+            article.append(Artikel(int(row[0]), row[1], float(row[2])))
+except FileNotFoundError:
+    pass
 
 while True:
     # Den Nutzer zwischen Auflisten und Hinzufügen
