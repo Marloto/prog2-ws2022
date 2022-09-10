@@ -29,20 +29,31 @@ class Bestellung:
 Bestellung_Liste = []
 
 def save():
+    # ToDo bisher ungetestet
     for element in Bestellung_Liste:
         with open("orders.csv", 'w', newline='') as csvfile:
             writer = csv.writer(csvfile, delimiter=';', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-            spaltenListe = [element.Datum, element.Liefer, element.Bestellungsnummer]
+            spaltenListe = [element.Datum, element.Liefer, element.Bestellungsnummer,
+                            element.Lieferadresse.Name, element.Lieferadresse.Strasse, element.Lieferadresse.PLZ, element.Lieferadresse.Ort,
+                            element.Rechnungsadresse.Name, element.Rechnungsadresse.Strasse, element.Rechnungsadresse.PLZ, element.Rechnungsadresse.Ort]
+            for pos in element.Positionen:
+                spaltenListe.append(pos.anzahl)
+                spaltenListe.append(pos.artikel.Artikel_Name)
             writer.writerow(spaltenListe)
 
 with open("orders.csv", newline='') as csvfile:
     reader = csv.reader(csvfile, delimiter=';', quotechar='"')
     for row in reader:
-        Bestellung_Liste.append(Bestellung(row[2], row[0], row[1]))
+        kunde = None # ToDo wie Kunden wiederfinden?
+        lieferadresse = Adresse(row[3], row[4], row[5], row[6])
+        rechnungsadresse = Adresse(row[7], row[8], row[9], row[10])
+        bestellung = Bestellung(row[2], row[0], row[1], kunde, lieferadresse, rechnungsadresse)
+        for i in range(11, len(row), 2):
+            artikel = None # ToDo wie Artikel wiederfinden?
+            bestellung.add_position(BestellPosition(row[i], artikel))
+        Bestellung_Liste.append(bestellung)
 
 while True:
-    # Den Nutzer zwischen Auflisten und Hinzufügen
-    # auswählen lassen?
     print("(1) Auflisten")
     print("(2) Hinzufügen")
     print("(3) Break")
